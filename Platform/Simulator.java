@@ -1,9 +1,11 @@
 /* Author: Mingcheng Chen */
 
+import java.util.Random;
+
 public class Simulator {
   public static void main(String[] args) {
-    if (args.length != 6) {
-      System.out.println("Usage: java Simulator <world> <agent> <knows_thief> <steps> <episodes> <policy_output>");
+    if (args.length != 7) {
+      System.out.println("Usage: java Simulator <world> <agent> <knows_thief> <steps> <episodes> <policy_output> <episode_output>");
       return;
     }
 
@@ -57,8 +59,9 @@ public class Simulator {
     }
 
     String policyOutput = args[5];
+    String episodeOutput = args[6];
 
-    Simulator(world, agent, thiefKnown, steps, episodes, policyOutput).simulate();
+    (new Simulator(world, agent, thiefKnown, steps, episodes, policyOutput, episodeOutput)).simulate();
   }
 
   public Simulator(World world, Agent agent, boolean thiefKnown, int steps, int episodes, String policyOutput) {
@@ -68,6 +71,7 @@ public class Simulator {
     this.steps = steps;
     this.episodes = episodes;
     this.policyOutput = policyOutput;
+    this.rand = new Random();
   }
 
   public void simulate() {
@@ -78,6 +82,8 @@ public class Simulator {
     }
 
     this.agent.initialize(this.world.getNumberOfStates(), numOfActions);
+
+    ArrayList<Double> episodeList = new ArrayList<Double>();
 
     for (int episode = 0; episode < this.episodes; episode++) {
       this.world.initialize();
@@ -96,6 +102,8 @@ public class Simulator {
       boolean hasP1 = true, hasP2 = true;
 
       int currState = initialState;
+
+      double totalReward = 0.0;
 
       for (int step = 0; step < this.steps; step++) {
         int action = this.agent.chooseAction(currState);
@@ -120,8 +128,7 @@ public class Simulator {
 
         double reward;
 
-        // has nothing (needs to go back to the company)
-        if (!hasP1 && !hasP2) {
+        if (!hasP1 && !hasP2) {  // has nothing (needs to go back to the company)
           reward = 0.0;
 
           if (this.world.inCompany(robotRow, robotCol)) {  // load new packages
@@ -143,9 +150,39 @@ public class Simulator {
             hasP2 = false;
             reward = -lossByThief;
           } else if (this.world.slipperiness(robotRow, robotCol) > 0.0) {
+            if (rand.nextDouble() <= this.world.slipperiness(robotRow, robotCol)) {
+              hasP1 = false;
+              hasP2 = false;
+              reward = -lossBySlipperiness;
+            } else {
+              reward = 0.0;
+            }
           }
         }
+
+        totalReward += reward;
+        int newState = this.world.knowsThief() ? this.world.getState(robotRow, robotCol, thiefRow, hasP1, hasP2) :
+                                                 this.world.getState(robotRow, robotCol, hasP1, hasP2);
+
+        this.agent.updatePolicy(reward, action, currState, newState);
+
+        currState = newState;
       }
+
+      System.out.println("Episode " + (episode + 1) + ": reward = " + totalReward);
+      episodeList.add(reward);
+    }
+
+    this.agent.getPolicy().save(this.policyOutput);
+
+    try {
+      PrintWriter writer = new PrintWriter(this.episodeOutput);
+      for (int i = 0; i < episodeList.size(); i++) {
+        writer.println(episodeList.get(i));
+      }
+      writer.close();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 
@@ -161,4 +198,7 @@ public class Simulator {
   private int steps;
   private int episodes;
   private String policyOutput;
+  private String episodeOutput;
+
+  private Random rand;
 }
