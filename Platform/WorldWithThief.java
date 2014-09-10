@@ -18,9 +18,16 @@ T is the footprint of the thief.
 import java.util.Random;
 
 public class WorldWithThief implements World {
-  public WorldWithThief(boolean thiefKnown) {
+  public void beAwareOfThief() {
+    this.thiefKnown = true;
+  }
+
+  public void beIgnorantOfThief() {
+    this.thiefKnown = false;
+  }
+
+  public WorldWithThief() {
     this.rand = new Random();
-    this.thiefKnown = thiefKnown;
   }
 
   public void initialize() {
@@ -35,6 +42,26 @@ public class WorldWithThief implements World {
     return this.thiefKnown;
   }
 
+  public boolean inCompany(int row, int col) {
+    return row == this.getNumberOfRows() - 1 && col == 0;
+  }
+
+  public int hasCustomer(int row, int col) {
+    if (row == 0 && col == this.getNumberOfCols() - 1) {
+      return 1;
+    }
+
+    if (row == this.getNumberOfRows() - 1 && col == this.getNumberOfCols() - 1) {
+      return 2;
+    }
+
+    return 0;
+  }
+
+  public int getThiefRow() {
+    return this.thiefRow;
+  }
+
   public int getNumberOfRows() {
     return numOfRows;
   }
@@ -46,6 +73,47 @@ public class WorldWithThief implements World {
   public int getNumberOfStates() {
     return this.thiefKnown ? numOfRows * numOfCols * numOfRows * 2 * 2 :
                              numOfRows * numOfCols * 2 * 2;
+  }
+
+  public int getInitialState() {  // called immediately after initialize()
+    return this.thiefKnown ? this.getState(this.getNumberOfRows() - 1, 0, this.thiefRow, true, true) :
+                             this.getState(this.getNumberOfRows() - 1, 0, true, true);
+  }
+
+  public int getState(int robotRow, int robotCol, boolean hasP1, boolean hasP2) {  // called when the thief is unknown
+    int state = robotRot * this.getNumberOfCols() + robotCol;
+
+    if (hasP1) {
+      state = state * 2 + 1;
+    } else {
+      state = state * 2;
+    }
+
+    if (hasP2) {
+      state = state * 2 + 1;
+    } else {
+      state = state * 2;
+    }
+
+    return state;
+  }
+
+  public int getState(int robotRow, int robotCol, int thiefRow, boolean hasP1, boolean hasP2) {  // called when the thief is known
+    int state = (robotRot * this.getNumberOfCols() + robotCol) * this.getNumberOfRows() + thiefRow;
+
+    if (hasP1) {
+      state = state * 2 + 1;
+    } else {
+      state = state * 2;
+    }
+
+    if (hasP2) {
+      state = state * 2 + 1;
+    } else {
+      state = state * 2;
+    }
+
+    return state;
   }
 
   public void evolve() {

@@ -14,7 +14,15 @@ C is the company location.
 O has high slipperiness.
 */
 
+import java.lang.Runtime;
+
 public class WorldWithoutThief implements World {
+  public void beAwareOfThief() {
+  }
+
+  public void beIgnorantOfThief() {
+  }
+
   public void initialize() {
   }
 
@@ -24,6 +32,27 @@ public class WorldWithoutThief implements World {
 
   public boolean knowsThief() {
     return false;
+  }
+
+  public boolean inCompany(int row, int col) {
+    return row == this.getNumberOfRows() - 1 && col == 0;
+  }
+
+  public int hasCustomer(int row, int col) {
+    if (row == 0 && col == this.getNumberOfCols() - 1) {
+      return 1;
+    }
+
+    if (row == this.getNumberOfRows() - 1 && col == this.getNumberOfCols() - 1) {
+      return 2;
+    }
+
+    return 0;
+  }
+
+  public int getThiefRow() {
+    System.out.println("Error: This world does not have thief.");
+    System.exit(0);
   }
 
   public int getNumberOfRows() {
@@ -36,6 +65,33 @@ public class WorldWithoutThief implements World {
 
   public int getNumberOfStates() {
     return numOfRows * numOfCols * 2 * 2;
+  }
+
+  public int getInitialState() {
+    return this.getState(this.getNumberOfRows() - 1, 0, true, true);
+  }
+
+  public int getState(int robotRow, int robotCol, boolean hasP1, boolean hasP2) {
+    int state = robotRot * this.getNumberOfCols() + robotCol;
+
+    if (hasP1) {
+      state = state * 2 + 1;
+    } else {
+      state = state * 2;
+    }
+
+    if (hasP2) {
+      state = state * 2 + 1;
+    } else {
+      state = state * 2;
+    }
+
+    return state;
+  }
+
+  public int getState(int robotRow, int robotCol, int thiefRow, boolean hasP1, boolean hasP2) {
+    System.out.println("Error: This world does not have thief.");
+    System.exit(0);
   }
 
   public void evolve() {

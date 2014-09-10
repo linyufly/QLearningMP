@@ -1,7 +1,8 @@
 /* Author: Mingcheng Chen */
 
 public interface Agent {
-  public void initialize(int numOfStates, int numOfActions, int initialState);
-  public int chooseAction(double reward, int newState);
+  public void initialize(int numOfStates, int numOfActions);
+  public int chooseAction(int state);
+  public void updatePolicy(double reward, int oldState, int newState);
   public Policy getPolicy();
 }
