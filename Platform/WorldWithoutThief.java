@@ -117,6 +117,61 @@ public class WorldWithoutThief implements World {
     return false;
   }
 
+  public static void main(String[] args) {
+    if (args.length != 4) {
+      System.out.println("Usage: java WorldWithoutThief <robot_row> <robot_col> <has_package_1> <has_package_2>");
+      return;
+    }
+
+    int robotRow, robotCol;
+
+    try {
+      robotRow = Integer.parseInt(args[0]);
+
+      if (robotRow < 0 || robotRow >= numOfRows) {
+        System.out.println("Error: robot_row is out of range");
+        return;
+      }
+    } catch (Exception e) {
+      System.out.println("Error: invalid robot_row");
+      return;
+    }
+
+    try {
+      robotCol = Integer.parseInt(args[1]);
+
+      if (robotCol < 0 || robotCol >= numOfCols) {
+        System.out.println("Error: robot_col is out of range");
+        return;
+      }
+    } catch (Exception e) {
+      System.out.println("Error: invalid robot_col");
+      return;
+    }
+
+    boolean hasP1, hasP2;
+
+    if (args[2].equals("y")) {
+      hasP1 = true;
+    } else if (args[2].equals("n")) {
+      hasP1 = false;
+    } else {
+      System.out.println("Error: has_package_1 should be y or n");
+      return;
+    }
+
+    if (args[3].equals("y")) {
+      hasP2 = true;
+    } else if (args[3].equals("n")) {
+      hasP2 = false;
+    } else {
+      System.out.println("Error: has_package_2 should be y or n");
+      return;
+    }
+
+    System.out.println("The state ID is " + (new WorldWithoutThief()).getState(robotRow, robotCol, hasP1, hasP2));
+  }
+
   private static final int numOfRows = 5;
   private static final int numOfCols = 5;
   private static final double highSlipperiness = 0.6;

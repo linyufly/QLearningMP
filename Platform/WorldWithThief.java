@@ -142,6 +142,83 @@ public class WorldWithThief implements World {
     return row == thiefRow && col == thiefCol;
   }
 
+  public static void main(String[] args) {
+    if (args.length != 4 && args.length != 5) {
+      System.out.println("Usage");
+      System.out.println("For states with thief position: java WorldWithoutThief <robot_row> <robot_col> <thief_row> <has_package_1> <has_package_2>");
+      System.out.println("For states without thief position: java WorldWithoutThief <robot_row> <robot_col> <has_package_1> <has_package_2>");
+      return;
+    }
+
+    int robotRow, robotCol;
+
+    try {
+      robotRow = Integer.parseInt(args[0]);
+
+      if (robotRow < 0 || robotRow >= numOfRows) {
+        System.out.println("Error: robot_row is out of range");
+        return;
+      }
+    } catch (Exception e) {
+      System.out.println("Error: invalid robot_row");
+      return;
+    }
+
+    try {
+      robotCol = Integer.parseInt(args[1]);
+
+      if (robotCol < 0 || robotCol >= numOfCols) {
+        System.out.println("Error: robot_col is out of range");
+        return;
+      }
+    } catch (Exception e) {
+      System.out.println("Error: invalid robot_col");
+      return;
+    }
+
+    int thiefRow = -1;
+    if (args.length == 5) {
+      try {
+        thiefRow = Integer.parseInt(args[2]);
+
+        if (thiefRow < 0 || thiefRow >= numOfRows) {
+          System.out.println("Error: thief_row is out of range");
+          return;
+        }
+      } catch (Exception e) {
+        System.out.println("Error: invalid thief_row");
+        return;
+      }
+    }
+
+    boolean hasP1, hasP2;
+
+    if (args[args.length - 2].equals("y")) {
+      hasP1 = true;
+    } else if (args[args.length - 2].equals("n")) {
+      hasP1 = false;
+    } else {
+      System.out.println("Error: has_package_1 should be y or n");
+      return;
+    }
+
+    if (args[args.length - 1].equals("y")) {
+      hasP2 = true;
+    } else if (args[args.length - 1].equals("n")) {
+      hasP2 = false;
+    } else {
+      System.out.println("Error: has_package_2 should be y or n");
+      return;
+    }
+
+    if (args.length == 4) {
+      System.out.println("The state ID without thief position is " + (new WorldWithThief()).getState(robotRow, robotCol, hasP1, hasP2));
+    } else {
+      System.out.println("The state ID with thief position is " + (new WorldWithThief()).getState(robotRow, robotCol, thiefRow, hasP1, hasP2));
+    }
+  }
+
+
   private Random rand;
   private int thiefRow;
   private boolean thiefKnown;
