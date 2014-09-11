@@ -218,7 +218,6 @@ public class WorldWithThief implements World {
     }
   }
 
-
   private Random rand;
   private int thiefRow;
   private boolean thiefKnown;
