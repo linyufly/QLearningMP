@@ -2,7 +2,7 @@
 /*
 The world is below.
 
-..#.1
+..O.1
 ..#..
 ..#OO
 ..#..
@@ -53,6 +53,8 @@ public class WorldWithoutThief implements World {
   public int getThiefRow() {
     System.out.println("Error: This world does not have thief.");
     System.exit(0);
+
+    return -1;
   }
 
   public int getNumberOfRows() {
@@ -72,7 +74,7 @@ public class WorldWithoutThief implements World {
   }
 
   public int getState(int robotRow, int robotCol, boolean hasP1, boolean hasP2) {
-    int state = robotRot * this.getNumberOfCols() + robotCol;
+    int state = robotRow * this.getNumberOfCols() + robotCol;
 
     if (hasP1) {
       state = state * 2 + 1;
@@ -92,17 +94,19 @@ public class WorldWithoutThief implements World {
   public int getState(int robotRow, int robotCol, int thiefRow, boolean hasP1, boolean hasP2) {
     System.out.println("Error: This world does not have thief.");
     System.exit(0);
+
+    return -1;
   }
 
   public void evolve() {
   }
 
   public double slipperiness(int row, int col) {
-    if (col == 2) {
+    if (row > 0 && col == 2) {
       return lowSlipperiness;
     }
 
-    if (row == 2 && col > 2) {
+    if (row == 0 && col == 2 || row == 2 && col > 2) {
       return highSlipperiness;
     }
 
@@ -116,5 +120,5 @@ public class WorldWithoutThief implements World {
   private static final int numOfRows = 5;
   private static final int numOfCols = 5;
   private static final double highSlipperiness = 0.6;
-  private static final double lowSlipperiness = 0.2;
+  private static final double lowSlipperiness = 0.1;
 }

@@ -81,7 +81,7 @@ public class WorldWithThief implements World {
   }
 
   public int getState(int robotRow, int robotCol, boolean hasP1, boolean hasP2) {  // called when the thief is unknown
-    int state = robotRot * this.getNumberOfCols() + robotCol;
+    int state = robotRow * this.getNumberOfCols() + robotCol;
 
     if (hasP1) {
       state = state * 2 + 1;
@@ -99,7 +99,7 @@ public class WorldWithThief implements World {
   }
 
   public int getState(int robotRow, int robotCol, int thiefRow, boolean hasP1, boolean hasP2) {  // called when the thief is known
-    int state = (robotRot * this.getNumberOfCols() + robotCol) * this.getNumberOfRows() + thiefRow;
+    int state = (robotRow * this.getNumberOfCols() + robotCol) * this.getNumberOfRows() + thiefRow;
 
     if (hasP1) {
       state = state * 2 + 1;

@@ -1,6 +1,7 @@
 /* Author: Mingcheng Chen */
 
 import java.util.Random;
+import java.util.ArrayList;
 
 public class QAgent implements Agent {
   public QAgent() {
@@ -37,12 +38,19 @@ public class QAgent implements Agent {
 
     double maxQ = this.bestUtility(state);
 
+    // System.out.println("maxQ = " + maxQ);
+
     ArrayList<Integer> candidates = new ArrayList<Integer>();
     for (int i = 0; i < this.numOfActions; i++) {
+      
+      // System.out.println("qValue: " + this.qValue[state][i]);
+
       if (this.qValue[state][i] == maxQ) {
         candidates.add(i);
       }
     }
+
+    // System.out.println("candidates = " + candidates.size());
 
     return candidates.get(this.rand.nextInt(candidates.size()));
   }
@@ -54,12 +62,25 @@ public class QAgent implements Agent {
   }
 
   public Policy getPolicy() {
-    for (
+    int[] actions = new int[this.numOfStates];
+
+    for (int state = 0; state < this.numOfStates; state++) {
+      double maxQ = this.bestUtility(state);
+
+      for (int i = 0; i < this.numOfActions; i++) {
+        if (this.qValue[state][i] == maxQ) {
+          actions[state] = i;
+          break;
+        }
+      }
+    }
+
+    return new Policy(actions);
   }
 
   private static final double discount = 0.9;
   private static final double rate = 0.1;
-  private static final double epsilon = 0.05;
+  private static final double epsilon = 0.1;
 
   private int numOfStates;
   private int numOfActions;

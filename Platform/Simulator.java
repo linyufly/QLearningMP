@@ -1,6 +1,8 @@
 /* Author: Mingcheng Chen */
 
 import java.util.Random;
+import java.util.ArrayList;
+import java.io.PrintWriter;
 
 public class Simulator {
   public static void main(String[] args) {
@@ -64,13 +66,14 @@ public class Simulator {
     (new Simulator(world, agent, thiefKnown, steps, episodes, policyOutput, episodeOutput)).simulate();
   }
 
-  public Simulator(World world, Agent agent, boolean thiefKnown, int steps, int episodes, String policyOutput) {
+  public Simulator(World world, Agent agent, boolean thiefKnown, int steps, int episodes, String policyOutput, String episodeOutput) {
     this.world = world;
     this.agent = agent;
     this.thiefKnown = thiefKnown;
     this.steps = steps;
     this.episodes = episodes;
     this.policyOutput = policyOutput;
+    this.episodeOutput = episodeOutput;
     this.rand = new Random();
   }
 
@@ -126,7 +129,7 @@ public class Simulator {
           thiefRow = this.world.getThiefRow();
         }
 
-        double reward;
+        double reward = 0.0;
 
         if (!hasP1 && !hasP2) {  // has nothing (needs to go back to the company)
           reward = 0.0;
@@ -170,7 +173,7 @@ public class Simulator {
       }
 
       System.out.println("Episode " + (episode + 1) + ": reward = " + totalReward);
-      episodeList.add(reward);
+      episodeList.add(totalReward);
     }
 
     this.agent.getPolicy().save(this.policyOutput);
