@@ -80,7 +80,7 @@ public class QAgent implements Agent {
 
   private static final double discount = 0.9;
   private static final double rate = 0.1;
-  private static final double epsilon = 0.1;
+  private static final double epsilon = 0.05;
 
   private int numOfStates;
   private int numOfActions;
