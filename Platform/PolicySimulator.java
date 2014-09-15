@@ -85,8 +85,6 @@ public class PolicySimulator {
   private void OutputState(int robotRow, int robotCol, boolean hasP1, boolean hasP2, double totalReward) {
     char[][] maze = new char[this.world.getNumberOfRows()][this.world.getNumberOfCols()];
 
-    maze[this.world.getNumberOfRows() - 1][0] = 'C';
-
     for (int i = 0; i < this.world.getNumberOfRows(); i++) {
       for (int j = 0; j < this.world.getNumberOfCols(); j++) {
         if (this.world.meetsThief(i, j)) {
@@ -105,6 +103,7 @@ public class PolicySimulator {
       }
     }
 
+    maze[this.world.getNumberOfRows() - 1][0] = 'C';
     maze[robotRow][robotCol] = 'R';
 
     for (int i = 0; i < maze.length; i++) {
