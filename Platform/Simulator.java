@@ -74,7 +74,7 @@ public class Simulator {
     this.episodes = episodes;
     this.policyOutput = policyOutput;
     this.episodeOutput = episodeOutput;
-    this.rand = new Random();
+    this.rand = new Random(System.currentTimeMillis());
   }
 
   public void simulate() {
