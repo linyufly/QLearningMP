@@ -10,6 +10,10 @@ public class Policy {
     }
   }
 
+  public int getAction(int state) {
+    return this.actions[state];
+  }
+
   public void save(String filename) {
     try {
     PrintWriter writer = new PrintWriter(filename);
