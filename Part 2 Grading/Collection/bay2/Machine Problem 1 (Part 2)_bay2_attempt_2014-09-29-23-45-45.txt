@@ -1,0 +1,15 @@
+Name: Michael Bay (bay2)
+Assignment: Machine Problem 1 (Part 2)
+Date Submitted: Monday, September 29, 2014 11:45:45 PM CDT
+Current Grade: Needs Grading
+
+Submission Field:
+There is no student submission text data for this assignment.
+
+Comments:
+Please query me if you cannot open any of the projects. The agent to be used for EligibilityTraces is WatkinAgent and it is the Watkin algorithm with eligibility traces that I implemented.
+
+Files:
+	Original filename: AI_submission.zip
+	Filename: Machine Problem 1 (Part 2)_bay2_attempt_2014-09-29-23-45-45_AI_submission.zip
+
